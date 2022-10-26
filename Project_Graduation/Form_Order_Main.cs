@@ -388,7 +388,6 @@ namespace Project_Graduation
 
         private void SETForm(string sqlcmd)
         {
-            Dset = new DataSet();
             SqlConnection conn = new SqlConnection(connstring);
             SqlDataAdapter SDA = new SqlDataAdapter(sqlcmd, conn);
 
@@ -434,7 +433,6 @@ namespace Project_Graduation
             INPUT_Search_Option.SelectedIndex = 0;
             INPUT_Filter1.SelectedIndex = 0;
             SETForm(DefaultSet + " ORDER BY Sell_Num Desc");
-
 
             Dset.Tables.Add("Table_Favorite");          // 어쩔수 없이 넣었다-> 
 
