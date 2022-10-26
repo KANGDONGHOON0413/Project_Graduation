@@ -99,7 +99,7 @@ namespace Project_Graduation
 
                         cmd.ExecuteNonQuery();
 
-                        MessageBox.Show("물품이 성공적으로 판매리스트에 올랐습니다.");
+                        MessageBox.Show("물품이 성공적으로 판매리스트에 올랐습니다.","등록확인");
 
                         Reset();
                     }
@@ -132,6 +132,7 @@ namespace Project_Graduation
 
                 SqlCommandBuilder SCB = new SqlCommandBuilder(SDA);
                 SDA.Update(dt);
+                MessageBox.Show("물품정보가 변경되었습니다.", "업데이트 확인");
                 Reset();
             }
             catch(Exception exc)
