@@ -236,7 +236,7 @@ namespace Project_Graduation
                 Plist.Add(new Param() { ProcedureParam = "@In_Product_Num", InputParam = int.Parse(INPUT_Quantity.Text) });
                 UseProcedure.StoredProcedure1("MakeOrders", Plist, "@Out_message");
 
-
+                Dset.Tables["Sell"].Clear();
                 //datagridview 초기화
                 SETForm(DefaultSet + " ORDER BY Sell_Num Desc");
             }
@@ -441,7 +441,7 @@ namespace Project_Graduation
 
         private void Form_Order_Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Dset.Tables["Sell"].Clear();
+            Dset.Clear();
         }
 
         #endregion
