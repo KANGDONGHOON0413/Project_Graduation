@@ -11,9 +11,7 @@ namespace Project_Graduation
 {
     public partial class Form_Main : Form
     {
-        SqlConnection conn;
         DataSet Dset;
-
 
         public Form_Main()
         {
