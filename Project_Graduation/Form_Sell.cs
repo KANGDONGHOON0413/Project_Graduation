@@ -25,28 +25,38 @@ namespace Project_Graduation
 
         public Form_Sell(int Sell_Num)     //물건 수정
         {
-            InitializeComponent();
-            this.Sell_Num = Sell_Num;
+            try
+            {
+                InitializeComponent();
+                this.Sell_Num = Sell_Num;
 
-            SqlConnection conn = new SqlConnection(connstring);
-            dt = new DataTable();
-            SDA = new SqlDataAdapter("dbo.SelectSell", conn);
-            SDA.SelectCommand.CommandType = CommandType.StoredProcedure;
-            SDA.SelectCommand.Parameters.AddWithValue("@Sell_Num", Sell_Num);
-            //SDA.SelectCommand.Parameters.AddWithValue("@PW", privacy.PW);
+                SqlConnection conn = new SqlConnection(connstring);
+                dt = new DataTable();
+                SDA = new SqlDataAdapter("dbo.SelectSell", conn);
+                SDA.SelectCommand.CommandType = CommandType.StoredProcedure;
+                SDA.SelectCommand.Parameters.AddWithValue("@Sell_Num", Sell_Num);
 
-            SDA.Fill(dt);
+                SDA.Fill(dt);
 
-            dr = dt.Rows[0];
+                dr = dt.Rows[0];
 
-            if (!(dr["Product_Image"] is DBNull)) pictureBox1.Image = allMethods.ConvertByteArrayToImage((byte[])dr["Product_Image"]);
-            INPUT_Item_Name.Text = dr["Product_Name"].ToString();
-            INPUT_Item_Price.Text = dr["Product_Price"].ToString();
-            INPUT_Item_Stock.Text = dr["Product_Num"].ToString();
-            INPUT_Description.Text = dr["Product_Description"].ToString();
-            BTN_Sell.Visible = false;
-            BTN_Update.Visible = true;
-            BTN_Delete.Visible = true;
+                if (!(dr["Product_Image"] is DBNull)) pictureBox1.Image = allMethods.ConvertByteArrayToImage((byte[])dr["Product_Image"]);
+                INPUT_Item_Name.Text = dr["Product_Name"].ToString();
+                INPUT_Item_Price.Text = dr["Product_Price"].ToString();
+                INPUT_Item_Stock.Text = dr["Product_Num"].ToString();
+                INPUT_Description.Text = dr["Product_Description"].ToString();
+                BTN_Sell.Visible = false;
+                BTN_Update.Visible = true;
+                BTN_Delete.Visible = true;
+            }
+            catch (SqlException)
+            {
+                MessageBox.Show("서버 연결 오류 발생");
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
         }
 
 
@@ -135,6 +145,10 @@ namespace Project_Graduation
                 MessageBox.Show("물품정보가 변경되었습니다.", "업데이트 확인");
                 Reset();
             }
+            catch (SqlException)
+            {
+                MessageBox.Show("서버 연결 오류");
+            }
             catch(Exception exc)
             {
                 MessageBox.Show(exc.Message,"취소");
@@ -143,13 +157,24 @@ namespace Project_Graduation
 
         private void BTN_Delete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("제품을 삭제하시겠습니까?", "update", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            try
             {
-                dr.Delete();
-                SqlCommandBuilder SCB = new SqlCommandBuilder(SDA);
-                SDA.Update(dt);
-                MessageBox.Show("삭제가 완료되었습니다", "삭제완료");
-                Reset();
+                if (MessageBox.Show("제품을 삭제하시겠습니까?", "update", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    dr.Delete();
+                    SqlCommandBuilder SCB = new SqlCommandBuilder(SDA);
+                    SDA.Update(dt);
+                    MessageBox.Show("삭제가 완료되었습니다", "삭제완료");
+                    Reset();
+                }
+            }
+            catch (SqlException)
+            {
+                MessageBox.Show("서버 연결 오류 발생");
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
             }
         }
 

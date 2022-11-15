@@ -51,9 +51,13 @@ namespace Project_Graduation
                 }
 
             }
-            catch(SqlException)
+            catch (SqlException)
             {
-                MessageBox.Show("ID가 존재하지 않습니다.");
+                MessageBox.Show("서버 연결 오류 발생");
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
             }
         }
 

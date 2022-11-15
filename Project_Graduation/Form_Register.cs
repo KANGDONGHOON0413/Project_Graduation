@@ -32,7 +32,9 @@ namespace Project_Graduation
 
             else  //값을 받아 insert하는 부분
             {
-                string registerQuery = "Register_Cmd";
+                try
+                {
+                    string registerQuery = "Register_Cmd";
                 SqlConnection conn = new SqlConnection(privacy.connstring);
                 SqlDataAdapter SDA = new SqlDataAdapter(registerQuery, conn);
                 DataSet Dset = new DataSet();
@@ -41,8 +43,7 @@ namespace Project_Graduation
                 SDA.Fill(Dset, "Table_User");
                 SqlCommandBuilder SCB = new SqlCommandBuilder(SDA);
                 
-                try
-                {
+               
                 if (Dset.Tables["Table_User"].Rows.Count != 0) throw new Exception("이미 존재하는 아이디입니다.");
 
                 DataRow NewRow = Dset.Tables[0].NewRow();;
@@ -57,9 +58,13 @@ namespace Project_Graduation
                     MessageBox.Show("Register complete!", "register FIN");
                     this.Close();
                 }
+                catch (SqlException)
+                {
+                    MessageBox.Show("서버 연결 오류 발생");
+                }
                 catch (Exception exc)
                 {
-                    MessageBox.Show(exc.Message, "ERROR");
+                    MessageBox.Show(exc.Message);
                 }
             }
         }

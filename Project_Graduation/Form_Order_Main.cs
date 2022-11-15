@@ -57,29 +57,40 @@ namespace Project_Graduation
             if (string.IsNullOrEmpty(INPUT_Search.Text.Trim())) MessageBox.Show("입력란을 확인하세요");
             else
             {
-                string Filter = DefaultSet + "And Product_Name Like '%" + INPUT_Search.Text.Trim() + "%'";
-                if (INPUT_Search_Option.SelectedIndex == 1) Filter = DefaultSet + "And Seller_ID = '" + INPUT_Search.Text.Trim() + "' ";
-
-                if (!string.IsNullOrEmpty(INPUT_Scope_Min.Text.Trim())) Filter += " And Product_Price > " + INPUT_Scope_Min.Text.Trim();
-                if (!string.IsNullOrEmpty(INPUT_Scope_Max.Text.Trim())) Filter += " And Product_Price < " + INPUT_Scope_Max.Text.Trim();
-
-                switch (INPUT_Filter1.SelectedIndex)
+                try
                 {
-                    case 0:
-                        Filter += "ORDER BY Sell_Num Desc";
-                        break;
-                    case 1:
-                        Filter += "ORDER BY Sell_Num";
-                        break;
-                    case 2:
-                        Filter += "Order By Product_Price";
-                        break;
-                    case 3:
-                        Filter += "Order By Product_Price Desc";
-                        break;
+                    string Filter = DefaultSet + "And Product_Name Like '%" + INPUT_Search.Text.Trim() + "%'";
+                    if (INPUT_Search_Option.SelectedIndex == 1) Filter = DefaultSet + "And Seller_ID = '" + INPUT_Search.Text.Trim() + "' ";
+
+                    if (!string.IsNullOrEmpty(INPUT_Scope_Min.Text.Trim())) Filter += " And Product_Price > " + INPUT_Scope_Min.Text.Trim();
+                    if (!string.IsNullOrEmpty(INPUT_Scope_Max.Text.Trim())) Filter += " And Product_Price < " + INPUT_Scope_Max.Text.Trim();
+
+                    switch (INPUT_Filter1.SelectedIndex)
+                    {
+                        case 0:
+                            Filter += "ORDER BY Sell_Num Desc";
+                            break;
+                        case 1:
+                            Filter += "ORDER BY Sell_Num";
+                            break;
+                        case 2:
+                            Filter += "Order By Product_Price";
+                            break;
+                        case 3:
+                            Filter += "Order By Product_Price Desc";
+                            break;
+                    }
+                    Dset.Tables["Sell"].Clear();
+                    SETForm(Filter);
                 }
-                Dset.Tables["Sell"].Clear();
-                SETForm(Filter);
+                catch (SqlException)
+                {
+                    MessageBox.Show("서버 연결 오류 발생");
+                }
+                catch (Exception exc)
+                {
+                    MessageBox.Show(exc.Message);
+                }
             }
         }
 
@@ -240,6 +251,11 @@ namespace Project_Graduation
                 //datagridview 초기화
                 SETForm(DefaultSet + " ORDER BY Sell_Num Desc");
             }
+
+            catch (SqlException)
+            {
+                MessageBox.Show("서버 연결 오류 발생");
+            }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
@@ -255,31 +271,41 @@ namespace Project_Graduation
 
         private void BTN_Favorite_Click(object sender, EventArgs e)
         {
-            SqlCommandBuilder SCB = new SqlCommandBuilder(SDA_Favorite);
-            if (Dset.Tables["Table_Favorite"].Rows.Count == 1)  //이미 관심 등록을 해 놓은 경우
+            try
             {
-                Dset.Tables["Table_Favorite"].Rows[0].Delete();
-                SDA_Favorite.Update(Dset.Tables["Table_Favorite"]);
+                SqlCommandBuilder SCB = new SqlCommandBuilder(SDA_Favorite);
+                if (Dset.Tables["Table_Favorite"].Rows.Count == 1)  //이미 관심 등록을 해 놓은 경우
+                {
+                    Dset.Tables["Table_Favorite"].Rows[0].Delete();
+                    SDA_Favorite.Update(Dset.Tables["Table_Favorite"]);
 
-                MessageBox.Show("관심을 해제하였습니다.", "알림");
-                BTN_Favorite.Text = "Add To Favorite";
-                BTN_Favorite.BackgroundImage = Resources.nonfavorite;
+                    MessageBox.Show("관심을 해제하였습니다.", "알림");
+                    BTN_Favorite.Text = "Add To Favorite";
+                    BTN_Favorite.BackgroundImage = Resources.nonfavorite;
+                }
+                else
+                {
+                    DataRow dr = Dset.Tables["Table_Favorite"].NewRow();
+                    dr["User_ID"] = privacy.ID;
+                    dr["Sell_Num"] = SellNum;
+                    dr["Product_Name"] = OUTPUT_Item_Name.Text;
+                    Dset.Tables["Table_Favorite"].Rows.Add(dr);
+
+                    SDA_Favorite.Update(Dset, "Table_Favorite");
+
+                    MessageBox.Show("해당 상품을 관심목록에 추가하였습니다.\nMain의 Favorite 에서 확인하실 수 있어요.", "알림");
+                    BTN_Favorite.Text = "Already Favorite";
+                    BTN_Favorite.BackgroundImage = Resources.favorite_icon;
+                }
             }
-            else
+            catch (SqlException)
             {
-                DataRow dr = Dset.Tables["Table_Favorite"].NewRow();
-                dr["User_ID"] = privacy.ID;
-                dr["Sell_Num"] = SellNum;
-                dr["Product_Name"] = OUTPUT_Item_Name.Text;
-                Dset.Tables["Table_Favorite"].Rows.Add(dr);
-
-                SDA_Favorite.Update(Dset, "Table_Favorite");
-
-                MessageBox.Show("해당 상품을 관심목록에 추가하였습니다.\nMain의 Favorite 에서 확인하실 수 있어요.", "알림");
-                BTN_Favorite.Text = "Already Favorite";
-                BTN_Favorite.BackgroundImage = Resources.favorite_icon;
+                MessageBox.Show("서버 연결 오류 발생");
             }
-
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
         }
 
         #region 물건 개수 입력 부분(Quantity Events)
@@ -347,42 +373,64 @@ namespace Project_Graduation
 
         private void ShowItemDetails()
         {
-            SqlConnection conn = new SqlConnection(connstring);
-            SqlDataAdapter SDA = new SqlDataAdapter("SelectSell", conn);
-            SDA.SelectCommand.CommandType = CommandType.StoredProcedure;
-            SDA.SelectCommand.Parameters.AddWithValue("@Sell_Num", SellNum);
-            SDA.Fill(Dset, "Selected_row");
+            try
+            {
+                SqlConnection conn = new SqlConnection(connstring);
+                SqlDataAdapter SDA = new SqlDataAdapter("SelectSell", conn);
+                SDA.SelectCommand.CommandType = CommandType.StoredProcedure;
+                SDA.SelectCommand.Parameters.AddWithValue("@Sell_Num", SellNum);
+                SDA.Fill(Dset, "Selected_row");
 
-            DataRow[] Drow = Dset.Tables["Selected_row"].Select();
+                DataRow[] Drow = Dset.Tables["Selected_row"].Select();
 
-            if (!(Drow[0]["Product_Image"] is DBNull))
-                pictureBox1.Image = allMethods.ConvertByteArrayToImage((byte[])Drow[0]["Product_Image"]);
-            else pictureBox1.Image = null;
+                if (!(Drow[0]["Product_Image"] is DBNull))
+                    pictureBox1.Image = allMethods.ConvertByteArrayToImage((byte[])Drow[0]["Product_Image"]);
+                else pictureBox1.Image = null;
 
-            OUTPUT_Item_Name.Text = Drow[0]["Product_Name"].ToString();
-            OUTPUT_Stock.Text = Drow[0]["Product_Num"].ToString();
-            OUTPUT_Price.Text = Drow[0]["Product_Price"].ToString();
-            OUTPUT_Seller_ID.Text = Drow[0]["Seller_ID"].ToString();
-            OUTPUT_Description.Text = Drow[0]["Product_Description"].ToString();
-            Dset.Tables["Selected_row"].Clear();
+                OUTPUT_Item_Name.Text = Drow[0]["Product_Name"].ToString();
+                OUTPUT_Stock.Text = Drow[0]["Product_Num"].ToString();
+                OUTPUT_Price.Text = Drow[0]["Product_Price"].ToString();
+                OUTPUT_Seller_ID.Text = Drow[0]["Seller_ID"].ToString();
+                OUTPUT_Description.Text = Drow[0]["Product_Description"].ToString();
+                Dset.Tables["Selected_row"].Clear();
+            }
+            catch (SqlException)
+            {
+                MessageBox.Show("서버 연결 오류 발생");
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
         }
 
         private void Is_Favorite()
         {
-            Dset.Tables["Table_Favorite"].Clear();
-            SqlConnection conn = new SqlConnection(connstring);
-            SDA_Favorite = new SqlDataAdapter("Select * From Table_Favorites Where Sell_Num =" + SellNum, conn);
-            SDA_Favorite.Fill(Dset, "Table_Favorite");
+            try
+            {
+                Dset.Tables["Table_Favorite"].Clear();
+                SqlConnection conn = new SqlConnection(connstring);
+                SDA_Favorite = new SqlDataAdapter("Select * From Table_Favorites Where Sell_Num =" + SellNum, conn);
+                SDA_Favorite.Fill(Dset, "Table_Favorite");
 
-            if (Dset.Tables["Table_Favorite"].Rows.Count == 1)
+                if (Dset.Tables["Table_Favorite"].Rows.Count == 1)
+                {
+                    BTN_Favorite.Text = "Already Favorite";
+                    BTN_Favorite.BackgroundImage = Resources.favorite_icon;
+                }
+                else
+                {
+                    BTN_Favorite.Text = "Add To Favorite";
+                    BTN_Favorite.BackgroundImage = Resources.nonfavorite;
+                }
+            }         
+            catch (SqlException)
             {
-                BTN_Favorite.Text = "Already Favorite";
-                BTN_Favorite.BackgroundImage = Resources.favorite_icon;
+                MessageBox.Show("서버 연결 오류 발생");
             }
-            else
+            catch (Exception exc)
             {
-                BTN_Favorite.Text = "Add To Favorite";
-                BTN_Favorite.BackgroundImage = Resources.nonfavorite;
+                MessageBox.Show(exc.Message);
             }
         }
 

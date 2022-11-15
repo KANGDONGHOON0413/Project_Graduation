@@ -11,8 +11,9 @@ namespace Project_Graduation
 {
     public partial class Form_Main : Form
     {
-      
+        SqlConnection conn;
         DataSet Dset;
+
 
         public Form_Main()
         {
@@ -155,6 +156,7 @@ namespace Project_Graduation
         #region =========Form Start And End Event===========
         private void Form_Main_Shown(object sender, EventArgs e)
         {
+           // conn = new SqlConnection(privacy.connstring);
             Dset = new DataSet();
 
             ViewSettings();
@@ -178,54 +180,65 @@ namespace Project_Graduation
 
         private async void ViewSettings()
         {
-            using (SqlConnection conn = new SqlConnection(privacy.connstring))
+            try
             {
-                Dset.Clear();
-                SqlDataAdapter SDA_Info = new SqlDataAdapter("UserInfo", conn);
-                SDA_Info.SelectCommand.CommandType = CommandType.StoredProcedure;
-                SDA_Info.SelectCommand.Parameters.AddWithValue("@ID", privacy.ID);
-                SDA_Info.SelectCommand.Parameters.AddWithValue("@PW", privacy.PW);
-                SDA_Info.Fill(Dset, "Info");
-
-            }
-            foreach (DataRow dRow in Dset.Tables["Info"].Select())
-            {
-                TXT_Name.Text = dRow["Name"].ToString();
-                TXT_Phone_Num.Text = "Phone Number:  " + dRow["Phone"].ToString();
-            }
-
-            var task1 = Task.Run(() => fillTableSell());
-            var task2 = Task.Run(() => fillTableOrder());
-            var task3 = Task.Run(() => fillTableOrderReceive());
-            var task4 = Task.Run(() => ReceivingMsg());
-
-            await task1;
-            await task2;
-            await task3;
-
-            DGV_Sell_ing.DataSource = Dset.Tables["Table_Sell"];
-
-            DGV_Order.DataSource = Dset.Tables["Table_Order"];
-
-            DGV_Order_Receive.DataSource = Dset.Tables["Table_Order_Receive"];
-            await task4;
-
-
-            if (DGV_Order_Receive.Rows.Count > 0) MessageBox.Show("주문 들어온 물품이 있습니다", "물품 확인");
-            if (Dset.Tables["Table_Msg"].Rows.Count > 0)
-            {
-                foreach (DataRow msg in Dset.Tables["Table_Msg"].Rows)
+                using (SqlConnection conn = new SqlConnection(privacy.connstring))
                 {
-                    string msg_out = "";
-                    if (msg["MsgTitle"].Equals(true)) msg_out = "주문 완료";
-                    else msg_out = "주문거절";
-                    msg_out += "\n제품명: " + msg["Product_Name"] + "  수량: " + msg["Product_Num"] + "\n  " + msg["Msg"];
-                    MessageBox.Show(msg_out, "메시지");
+                    Dset.Clear();
+                    SqlDataAdapter SDA_Info = new SqlDataAdapter("UserInfo", conn);
+                    SDA_Info.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    SDA_Info.SelectCommand.Parameters.AddWithValue("@ID", privacy.ID);
+                    SDA_Info.SelectCommand.Parameters.AddWithValue("@PW", privacy.PW);
+                    SDA_Info.Fill(Dset, "Info");
                 }
+
+                foreach (DataRow dRow in Dset.Tables["Info"].Select())
+                {
+                    TXT_Name.Text = dRow["Name"].ToString();
+                    TXT_Phone_Num.Text = "Phone Number:  " + dRow["Phone"].ToString();
+                }
+
+                var task1 = Task.Run(() => fillTableSell());
+                var task2 = Task.Run(() => fillTableOrder());
+                var task3 = Task.Run(() => fillTableOrderReceive());
+                var task4 = Task.Run(() => ReceivingMsg());
+
+                await task1;
+                await task2;
+                await task3;
+
+                DGV_Sell_ing.DataSource = Dset.Tables["Table_Sell"];
+
+                DGV_Order.DataSource = Dset.Tables["Table_Order"];
+
+                DGV_Order_Receive.DataSource = Dset.Tables["Table_Order_Receive"];
+                await task4;
+
+
+                if (DGV_Order_Receive.Rows.Count > 0) MessageBox.Show("주문 들어온 물품이 있습니다", "물품 확인");
+                if (Dset.Tables["Table_Msg"].Rows.Count > 0)
+                {
+                    foreach (DataRow msg in Dset.Tables["Table_Msg"].Rows)
+                    {
+                        string msg_out = "";
+                        if (msg["MsgTitle"].Equals(true)) msg_out = "주문 완료";
+                        else msg_out = "주문거절";
+                        msg_out += "\n제품명: " + msg["Product_Name"] + "  수량: " + msg["Product_Num"] + "\n  " + msg["Msg"];
+                        MessageBox.Show(msg_out, "메시지");
+                    }
+                }
+                Dset.Tables["Table_Msg"].Clear();
             }
-            Dset.Tables["Table_Msg"].Clear();
+            catch (SqlException)
+            {
+                MessageBox.Show("서버 연결 오류 발생");
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
         }
-      
+
         private void fillTableSell()
         {
             SqlConnection conn = new SqlConnection(privacy.connstring);
