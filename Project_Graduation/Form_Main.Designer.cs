@@ -89,8 +89,8 @@ namespace Project_Graduation
             // 
             // BTN_Sell
             // 
-            this.BTN_Sell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.BTN_Sell.Font = new System.Drawing.Font("맑은 고딕", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.BTN_Sell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.BTN_Sell.Font = new System.Drawing.Font("Modern No. 20", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.BTN_Sell.Location = new System.Drawing.Point(979, 23);
             this.BTN_Sell.Name = "BTN_Sell";
             this.BTN_Sell.Size = new System.Drawing.Size(94, 87);
@@ -180,7 +180,7 @@ namespace Project_Graduation
             // BTN_Order
             // 
             this.BTN_Order.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.BTN_Order.Font = new System.Drawing.Font("맑은 고딕", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.BTN_Order.Font = new System.Drawing.Font("Modern No. 20", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.BTN_Order.Location = new System.Drawing.Point(815, 23);
             this.BTN_Order.Name = "BTN_Order";
             this.BTN_Order.Size = new System.Drawing.Size(158, 87);
@@ -191,8 +191,8 @@ namespace Project_Graduation
             // 
             // button2
             // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.button2.Font = new System.Drawing.Font("맑은 고딕", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.button2.Font = new System.Drawing.Font("Modern No. 20", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button2.Location = new System.Drawing.Point(915, 116);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(158, 87);
@@ -254,6 +254,7 @@ namespace Project_Graduation
             this.BTN_Refresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.BTN_Refresh.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.BTN_Refresh.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.BTN_Refresh.Font = new System.Drawing.Font("맑은 고딕", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.BTN_Refresh.Location = new System.Drawing.Point(723, 24);
             this.BTN_Refresh.Name = "BTN_Refresh";
             this.BTN_Refresh.Size = new System.Drawing.Size(86, 179);

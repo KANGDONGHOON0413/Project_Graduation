@@ -36,9 +36,10 @@ namespace Project_Graduation
             // 
             // BTN_Login
             // 
-            this.BTN_Login.Location = new System.Drawing.Point(321, 331);
+            this.BTN_Login.Font = new System.Drawing.Font("맑은 고딕", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.BTN_Login.Location = new System.Drawing.Point(319, 326);
             this.BTN_Login.Name = "BTN_Login";
-            this.BTN_Login.Size = new System.Drawing.Size(161, 29);
+            this.BTN_Login.Size = new System.Drawing.Size(160, 34);
             this.BTN_Login.TabIndex = 0;
             this.BTN_Login.Text = "Login";
             this.BTN_Login.UseVisualStyleBackColor = true;
@@ -46,9 +47,10 @@ namespace Project_Graduation
             // 
             // BTN_Register
             // 
-            this.BTN_Register.Location = new System.Drawing.Point(321, 366);
+            this.BTN_Register.Font = new System.Drawing.Font("맑은 고딕", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.BTN_Register.Location = new System.Drawing.Point(319, 366);
             this.BTN_Register.Name = "BTN_Register";
-            this.BTN_Register.Size = new System.Drawing.Size(161, 29);
+            this.BTN_Register.Size = new System.Drawing.Size(160, 34);
             this.BTN_Register.TabIndex = 1;
             this.BTN_Register.Text = "Register";
             this.BTN_Register.UseVisualStyleBackColor = true;
@@ -58,10 +60,10 @@ namespace Project_Graduation
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.White;
-            this.label1.Font = new System.Drawing.Font("궁서체", 19.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(312, 110);
+            this.label1.Font = new System.Drawing.Font("궁서체", 30F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(280, 99);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(156, 33);
+            this.label1.Size = new System.Drawing.Size(227, 50);
             this.label1.TabIndex = 2;
             this.label1.Text = "만 물 상";
             // 
