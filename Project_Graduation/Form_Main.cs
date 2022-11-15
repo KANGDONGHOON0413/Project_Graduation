@@ -162,13 +162,14 @@ namespace Project_Graduation
 
         private void Form_Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show("종료하시겠습니까?", "종료", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                Application.Exit();
-            }
-            else e.Cancel = true;
+            if (MessageBox.Show("종료하시겠습니까?", "종료", MessageBoxButtons.YesNo) == DialogResult.No) e.Cancel = true;
         }
 
+        private void Form_Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            MessageBox.Show("이용해주셔서 감사합니다.", "EXIT");
+            Application.Exit();
+        }
         #endregion =========Form Start And End Event===========
 
 
@@ -272,6 +273,6 @@ namespace Project_Graduation
         }
 
 
-        #endregion
+        #endregion     
     }
 }

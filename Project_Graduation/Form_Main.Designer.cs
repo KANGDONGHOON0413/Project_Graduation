@@ -290,6 +290,7 @@ namespace Project_Graduation
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form_Main";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Main_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Main_FormClosed);
             this.Shown += new System.EventHandler(this.Form_Main_Shown);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.Form_Main_Layout);
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Sell_ing)).EndInit();

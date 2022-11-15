@@ -35,7 +35,7 @@ namespace Project_Graduation
           
                 if (Dset.Tables["Table_User"].Rows.Count > 0)
                 {
-                    MessageBox.Show("Login Success: ");
+                    MessageBox.Show("Login Success!", "Welcome");
                     
                     this.Hide();
                     this.DialogResult = DialogResult.OK;

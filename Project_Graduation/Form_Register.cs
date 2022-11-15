@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace Project_Graduation
 {
     public partial class Form_Register : Form
-    {       
+    {
         #region 생성자
 
         public Form_Register()
@@ -35,24 +35,24 @@ namespace Project_Graduation
                 try
                 {
                     string registerQuery = "Register_Cmd";
-                SqlConnection conn = new SqlConnection(privacy.connstring);
-                SqlDataAdapter SDA = new SqlDataAdapter(registerQuery, conn);
-                DataSet Dset = new DataSet();
-                SDA.SelectCommand.CommandType = CommandType.StoredProcedure;
-                SDA.SelectCommand.Parameters.AddWithValue("@ID", INPUT_Id.Text.Trim());
-                SDA.Fill(Dset, "Table_User");
-                SqlCommandBuilder SCB = new SqlCommandBuilder(SDA);
-                
-               
-                if (Dset.Tables["Table_User"].Rows.Count != 0) throw new Exception("이미 존재하는 아이디입니다.");
+                    SqlConnection conn = new SqlConnection(privacy.connstring);
+                    SqlDataAdapter SDA = new SqlDataAdapter(registerQuery, conn);
+                    DataSet Dset = new DataSet();
+                    SDA.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    SDA.SelectCommand.Parameters.AddWithValue("@ID", INPUT_Id.Text.Trim());
+                    SDA.Fill(Dset, "Table_User");
+                    SqlCommandBuilder SCB = new SqlCommandBuilder(SDA);
 
-                DataRow NewRow = Dset.Tables[0].NewRow();;
-                NewRow["ID"] = INPUT_Id.Text.Trim();
-                NewRow["Password"] = INPUT_Pw.Text;
-                NewRow["Name"] = INPUT_Name.Text.Trim();
-                NewRow["Phone"] = INPUT_Phone.Text;
-                Dset.Tables[0].Rows.Add(NewRow);
-               
+
+                    if (Dset.Tables["Table_User"].Rows.Count != 0) throw new Exception("이미 존재하는 아이디입니다.");
+
+                    DataRow NewRow = Dset.Tables[0].NewRow(); ;
+                    NewRow["ID"] = INPUT_Id.Text.Trim();
+                    NewRow["Password"] = INPUT_Pw.Text;
+                    NewRow["Name"] = INPUT_Name.Text.Trim();
+                    NewRow["Phone"] = INPUT_Phone.Text;
+                    Dset.Tables[0].Rows.Add(NewRow);
+
                     SDA.Update(Dset, "Table_User");
                     Dset.Clear();
                     MessageBox.Show("Register complete!", "register FIN");
@@ -72,7 +72,7 @@ namespace Project_Graduation
         #region Form_Event
         private void Form_Register_Load(object sender, EventArgs e)
         {
-           
+
         }
         #endregion Form_Event_end
 
